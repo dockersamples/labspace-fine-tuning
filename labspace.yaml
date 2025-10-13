@@ -1,11 +1,15 @@
-title: Labspace starter
+title: Fine-tuning models with Docker Offload and Unsloth
 description: |
-  A basic template for creating a Labspace, including all of the boilerplate needed to write and publish a Labspace.
+  Learn how to fine-tune lightweight LLMs to meet your application's needs
 
 sections:
   - title: Introduction
     contentPath: .labspace/01-introduction.md
-  - title: Main Content 1
-    contentPath: .labspace/02-main-content.md
+  - title: Fine-tuning a model
+    contentPath: .labspace/02-fine-tuning.md
+  - title: Validating the model
+    contentPath: .labspace/03-validating-the-model.md
+  - title: Publishing and running the model
+    contentPath: .labspace/04-publishing-and-running.md
   - title: Conclusion
-    contentPath: .labspace/03-conclusion.md
+    contentPath: .labspace/05-conclusion.md
