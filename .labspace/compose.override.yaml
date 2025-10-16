@@ -1,8 +1,52 @@
-services:
+services:  
   configurator:
     environment:
       PROJECT_CLONE_URL: https://github.com/dockersamples/labspace-fine-tuning
+      SETUP_SCRIPT: /scripts/validate-environment.sh
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    configs:
+      - source: validation-script
+        target: /scripts/validate-environment.sh
 
   workspace:
     environment:
       MODEL_RUNNER_HOST: http://172.17.0.1:12435
+
+configs:
+  validation-script:
+    content: |
+      #!/bin/bash
+
+      set -e
+
+      # Get Docker info as JSON. The `docker` CLI isn't available, so directly querying
+      DOCKER_INFO=$(curl -fq --unix-socket /var/run/docker.sock http://localhost/info)
+
+      # Check if running in Docker Offload environment
+      echo "🔎 Checking Docker Offload environment..."
+      OFFLOAD_LABEL=$(echo "$$DOCKER_INFO" | jq -r '.Labels[]? | select(startswith("cloud.docker.run.version="))')
+
+      if [ -z "$$OFFLOAD_LABEL" ]; then
+          echo "❌ Error: Not running in a Docker Offload environment."
+          echo "Please enable Docker Offload and restart this Labspace"
+          exit 1
+      fi
+
+      echo "✅ Docker Offload environment detected"
+
+      # Check if GPU (nvidia runtime) is available
+      echo "🔎 Checking GPU availability..."
+      NVIDIA_RUNTIME=$(echo "$$DOCKER_INFO" | jq -r '.Runtimes.nvidia.path // empty')
+
+      if [ -z "$$NVIDIA_RUNTIME" ]; then
+          echo "❌ Error: GPU not available."
+          echo "Docker Offload environment is not configured with GPUs. Please enable the GPU setting and try again."
+          exit 1
+      fi
+
+      echo "✅ GPU available: nvidia runtime found"
+
+      echo ""
+      echo "All checks passed! Environment is ready."
+      exit 0
