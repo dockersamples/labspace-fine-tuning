@@ -91,7 +91,13 @@ However, since you already have a data set and the fine-tuning code have been pr
 
     It will likely take a few moments to download the base image and perform all the required updates.
 
-3. Start a container using the newly created image and mounting the `gguf_output` directory (where the script will put the final GGUF file):
+3. Create a directory for the model output to be placed when completed:
+
+    ```bash
+    mkdir output
+    ```
+
+4. Start a container using the newly created image and mounting the `gguf_output` directory (where the script will put the final GGUF file):
 
     ```bash
     docker run -ti \
@@ -103,7 +109,7 @@ However, since you already have a data set and the fine-tuning code have been pr
 
     You will see the fine-tuning process kick off, which may have moments where it appears the output has frozen. The full model training takes about 12 minutes to run.
 
-4. Once the fine-tuning finishes, you should see the GGUF file in the `output` directory:
+5. Once the fine-tuning finishes, you should see the GGUF file in the `output` directory:
 
     ```bash
     ls output/
