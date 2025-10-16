@@ -47,7 +47,7 @@ The following JSON snippet provides an example, where `prompt` captures the inpu
 },
 ```
 
-The :fileLink[pii_redaction_train.json]{path="pii_redaction_train.json"} file contains a large dataset of ~35k samples. These provide a very large sampling of the ways in which PII might be represented in text.
+The :fileLink[data/training_data.json]{path="data/training_data.json"} file contains a large dataset of ~35k samples. These provide a very large sampling of the ways in which PII might be represented in text.
 
 > [!TIP]
 > Another valid use case for LLMs is to help generate these large datasets for training. You can craft prompts that can generate samples, after which you can validate the data and use it in fine-tuning
@@ -58,26 +58,57 @@ The :fileLink[pii_redaction_train.json]{path="pii_redaction_train.json"} file co
 
 With a base model chosen and starting data, it's time to perform the actual fine-tuning.
 
-1. Start a container using the `unsloth/unsloth` container, giving it access to all available GPUs:
+The [`unsloth/unsloth`](https://hub.docker.com/r/unsloth/unsloth) container image provides all of the tools required in order to perform fine-tuning. It even provides a Jupyter Notebook interface to let you explore and experiment with your setup.
+
+However, since you already have a data set and the fine-tuning code have been provided, you are going to write a Dockerfile that will perform the fine-tuning in a reproducible manner.
+
+1. Create a file named `Dockerfile` with the following contents:
+
+    ```dockerfile save-as=Dockerfile
+    FROM unsloth/unsloth:stable
+
+    # Install libcurl4-openssl-dev which is required by llama.cpp to save GGUF files and
+    # update the unsloth libraries to bring in some fixes related to saving to GGUF files
+    USER root
+    RUN apt update && \
+        apt install libcurl4-openssl-dev -y && \
+        rm -rf /var/lib/apt/lists/*
+    RUN pip install --upgrade unsloth-zoo && \
+        pip install --upgrade unsloth
+
+    WORKDIR /usr/local/app
+
+    COPY --link finetune.py ./
+    ENTRYPOINT [ ]
+    CMD ["python", "finetune.py"]
+    ```
+
+2. Build the container image using the following command:
 
     ```bash
-    docker run -dp 8888:8888 \
+    docker build -t fine-tuning .
+    ```
+
+    It will likely take a few moments to download the base image and perform all the required updates.
+
+3. Start a container using the newly created image and mounting the `gguf_output` directory (where the script will put the final GGUF file):
+
+    ```bash
+    docker run -ti \
         --gpus all \
-        -v ./:/workspace/work \
-        --name unsloth \
-        unsloth/unsloth
+        -v ./output:/usr/local/app/gguf_output \
+        -v ./data:/usr/local/app/data \
+        fine-tuning
     ```
 
-    This will likely take a moment to download as the image is a few GB in size.
+    You will see the fine-tuning process kick off, which may have moments where it appears the output has frozen. The full model training takes about 12 minutes to run.
 
-2. Once the container has started, exec into the container by running the following command:
+4. Once the fine-tuning finishes, you should see the GGUF file in the `output` directory:
 
     ```bash
-    docker exec -ti unsloth bash
+    ls output/
     ```
 
-3. Inside the container, run the following command to kick off the fine-tuning:
+    You should see a file named `gemma-3-270m-it.F16.gguf`
 
-    ```bash
-    python finetune.py
-    ```
+Hooray! You now have a model!

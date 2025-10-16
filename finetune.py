@@ -1,6 +1,8 @@
 from unsloth import FastModel
 from datasets import Dataset
+import os
 import json
+import shutil
 
 max_seq_length = 2048
 model, tokenizer = FastModel.from_pretrained(
@@ -11,7 +13,7 @@ model, tokenizer = FastModel.from_pretrained(
     full_finetuning=False,
 )
 
-with open("pii_redaction_train.json", "r", encoding="utf-8") as f:
+with open("data/training_data.json", "r", encoding="utf-8") as f:
     data = json.load(f)
 
 ds = Dataset.from_list(data)
@@ -76,6 +78,11 @@ trainer = SFTTrainer(
 )
 
 trainer_stats = trainer.train()
+
+os.makedirs("result", exist_ok=True) 
 model.save_pretrained_gguf("result", tokenizer, quantization_method = "f16")
+
 print(trainer_stats)
 
+os.makedirs("gguf_output", exist_ok=True) 
+shutil.move("gemma-3-270m-it.F16.gguf", "gguf_output/gemma-3-270m-it.F16.gguf")

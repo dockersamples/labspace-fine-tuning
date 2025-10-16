@@ -7,9 +7,7 @@ sections:
     contentPath: .labspace/01-introduction.md
   - title: Fine-tuning a model
     contentPath: .labspace/02-fine-tuning.md
-  - title: Validating the model
-    contentPath: .labspace/03-validating-the-model.md
-  - title: Publishing and running the model
-    contentPath: .labspace/04-publishing-and-running.md
+  - title: Validate and publish the model
+    contentPath: .labspace/03-validate-and-publish.md
   - title: Conclusion
-    contentPath: .labspace/05-conclusion.md
+    contentPath: .labspace/04-conclusion.md
