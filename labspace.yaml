@@ -1,3 +1,8 @@
+metadata:
+  id: dockersamples/labspace-fine-tuning
+  sourceRepo: github.com/dockersamples/labspace-fine-tuning
+  contentVersion: abcd123 # Will be replaced during release process
+
 title: Fine-tuning models with Docker Offload and Unsloth
 description: |
   Learn how to fine-tune lightweight LLMs to meet your application's needs
