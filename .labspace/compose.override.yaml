@@ -2,12 +2,12 @@ services:
   configurator:
     environment:
       PROJECT_CLONE_URL: https://github.com/dockersamples/labspace-fine-tuning
-      SETUP_SCRIPT: /scripts/validate-environment.sh
+      SETUP_SCRIPT: /init-scripts/validate-environment.sh
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
     configs:
       - source: validation-script
-        target: /scripts/validate-environment.sh
+        target: /init-scripts/validate-environment.sh
 
   workspace:
     environment:
