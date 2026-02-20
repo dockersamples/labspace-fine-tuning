@@ -2,6 +2,8 @@
 
 This Labspace provides a hands-on walkthrough on fine-tuning models using Docker Offload, Docker Model Runner, and Unsloth.
 
+This lab is heavily inspired and based on the blog posts written by 
+
 ## Learning objectives
 
 This Labspace will teach you the following:
@@ -12,13 +14,17 @@ This Labspace will teach you the following:
 
 ## Launch the Labspace
 
-To launch the Labspace, run the following command:
+To launch the Labspace, 
 
-```bash
-docker compose -f oci://dockersamples/labspace-fine-tuning up -d
-```
+1. Ensure you have Docker Offload running.
 
-And then open your browser to http://localhost:3030.
+2. Run the following command:
+
+    ```bash
+    docker compose -f oci://dockersamples/labspace-fine-tuning up -d
+    ```
+
+3. And then open your browser to http://localhost:3030.
 
 ### Using the Docker Desktop extension
 
@@ -106,3 +112,26 @@ The `finetune.py` script demonstrates how to:
 4. Train the model using the SFTTrainer from TRL
 5. Save the fine-tuned model
 
+## Contributing
+
+If you find something wrong or something that needs to be updated, feel free to submit a PR. If you want to make a larger change, feel free to fork the repo into your own repository.
+
+**Important note:** If you fork it, you will need to update the GHA workflow to point to your own Hub repo.
+
+1. Clone this repo
+
+2. Start the Labspace in content development mode:
+
+    ```bash
+    # On Mac/Linux
+    CONTENT_PATH=$PWD docker compose up --watch
+
+    # On Windows with PowerShell
+    $Env:CONTENT_PATH = (Get-Location).Path; docker compose up --watch
+    ```
+
+3. Open the Labspace at http://dockerlabs.xyz.
+
+4. Make the necessary changes and validate they appear as you expect in the Labspace
+
+    Be sure to check out the [docs](https://github.com/dockersamples/labspace-infra/tree/main/docs) for additional information and guidelines.

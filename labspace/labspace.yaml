@@ -9,10 +9,10 @@ description: |
 
 sections:
   - title: Introduction
-    contentPath: .labspace/01-introduction.md
+    contentPath: 01-introduction.md
   - title: Fine-tuning a model
-    contentPath: .labspace/02-fine-tuning.md
+    contentPath: 02-fine-tuning.md
   - title: Validate and publish the model
-    contentPath: .labspace/03-validate-and-publish.md
+    contentPath: 03-validate-and-publish.md
   - title: Conclusion
-    contentPath: .labspace/04-conclusion.md
+    contentPath: 04-conclusion.md
