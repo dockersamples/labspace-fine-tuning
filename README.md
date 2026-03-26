@@ -1,5 +1,8 @@
 # Labspace - Fine tuning
 
+> [!NOTE]
+> This lab has been archived due to pivots in Docker Offload, which have caused this lab to be unusable.
+
 This Labspace provides a hands-on walkthrough on fine-tuning models using Docker Offload, Docker Model Runner, and Unsloth.
 
 This lab is heavily inspired and based on the blog posts written by 
